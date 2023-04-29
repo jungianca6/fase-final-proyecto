@@ -100,20 +100,20 @@ def ventana():
         #Funcion de disparo de la bala de la nave
 
         def end():
-                global enemigosmuertos
-                if enemigosmuertos>=10:
+                if enemigosmuertos>=50:
                         gameover= tk.Toplevel() #se genera la pantalla que se muestra para el about
                         gameover.title("Space Shooters")
                         gameover.minsize(1000, 600)
                         gameover.maxsize(1000,600)
                         gameover.configure(background="#1C1A59")
 
-                        game.withdraw()
+                        game.destroy()
         
                         gameover.protocol('WM_DELETE_WINDOW', lambda:destruye_ventana(gameover,ventanamain))
         
                         volver = tk.Button(gameover, text="Volver", width=10, command=lambda:destruye_ventana(gameover,ventanamain))
                         volver.place(x=350, y=70)
+
         def restart():
                 game.destroy()
                 game = tk()
@@ -261,6 +261,9 @@ def ventana():
                         balasaliens = balasaliens[1:]
                         remove_bala_alien(id)
 
+        
+        
+
         def alienshoot(canvas,alien): #balas de los aliens
                 global balasaliens, lastenemyshottime,enemigoslista
 
@@ -280,10 +283,10 @@ def ventana():
                                         laseralienloop = game.after(10, movelaseralien, id, laseralien, None)
                                         balasaliens.append({'id': id, 'laseralien': laseralien, 'laseralienloop': laseralienloop})
                                 
-                                pygame.mixer.init()
-                                blastsound=pygame.mixer.Sound('blast shot.wav')
-                                blastsound.play()
-                                blastsound.set_volume(0.1)
+                                        pygame.mixer.init()
+                                        blastsound=pygame.mixer.Sound('blast shot.wav')
+                                        blastsound.play()
+                                        blastsound.set_volume(0.1)
                         
                         except IndexError:
                                 bordealien = canvas.bbox(alien)
@@ -296,17 +299,18 @@ def ventana():
                                         laseralienloop = game.after(10, movelaseralien, id, laseralien, None)
                                         balasaliens.append({'id': id, 'laseralien': laseralien, 'laseralienloop': laseralienloop})
                                 
-                                pygame.mixer.init()
-                                blastsound=pygame.mixer.Sound('blast shot.wav')
-                                blastsound.play()
-                                blastsound.set_volume(0.1)
+                                        pygame.mixer.init()
+                                        blastsound=pygame.mixer.Sound('blast shot.wav')
+                                        blastsound.play()
+                                        blastsound.set_volume(0.1)
+
 
         def movealiens(canvas,alien):
                 canvas.move(alien, -1, 0)
                 game.after(10,movealiens,canvas,alien)
                 alienshoot(canvas,alien)
-       
-                
+
+        
         def aliens(canvas,newalien):
                 global enemigoslista,contador_enemigos
                 if contador_enemigos<9:
@@ -323,8 +327,12 @@ def ventana():
                         if not enemigoslista: # si no hay enemigos, reiniciar contador
                                 contador_enemigos = 0
                         game.after(1000,aliens,canvas,newalien)
-        aliens(canvas,newalien)
+        aliens(canvas,newalien)      
 
+        
+       
+                
+        
         
        
         #Funciones de movimiento 
@@ -431,11 +439,10 @@ def ventana():
         game.protocol('WM_DELETE_WINDOW', lambda:destruye_ventana(game,ventanamain))
 
         #Boton de Regreso
-        volver = tk.Button(game, text="Volver", width=10, command=lambda:destruye_ventana(game,ventanamain))
+        volver = tk.Button(game, text="Volver", width=10, command=lambda:(destruye_ventana(game,ventanamain)))
         volver.place(x=900, y=570)
 
-        
-        ventanamain.mainloop()
+        game.mainloop()
         
 
     def highscore():
