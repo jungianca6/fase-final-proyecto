@@ -113,11 +113,7 @@ def ventana():
         
                         volver = tk.Button(gameover, text="Volver", width=10, command=lambda:destruye_ventana(gameover,ventanamain))
                         volver.place(x=350, y=70)
-
-        def restart():
-                game.destroy()
-                game = tk()
-                game.mainloop()              
+            
 
         def movelaser(id, laser, laserloop):
                 global balas, enemigoslista
