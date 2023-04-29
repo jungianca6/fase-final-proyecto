@@ -15,22 +15,33 @@ hitbox=0
 
 puntos=0
 
-tiempo=0
 
 enemigosmuertos = 0
 
 contador_enemigos = 0
 
+tiempo=10
 
+def reiniciar():
+        global balas, balasaliens, enemigoslista, enemigosmuertos, contador_enemigos,tiempo
+        balas=[]
+        balasaliens=[]
+        enemigoslista=[]
+        enemigosmuertos = 0
+        contador_enemigos = 0
+        tiempo = 10
 
+        
 def destruye_ventana(vD,vG):     #entrar y salir               
         """  
         Funcionalidad: Destruye la ventana actual
         Entradas:N/A
         Salidas:N/A
         """
-        vG.deiconify()
         vD.destroy()
+        vG.deiconify()
+        reiniciar()
+        
         
 def ventana():
     ventanamain = tk.Tk()
@@ -99,21 +110,33 @@ def ventana():
 
         #Funcion de disparo de la bala de la nave
 
+        
+        
+
+        
         def end():
-                if enemigosmuertos>=50:
+                if enemigosmuertos>=10 or tiempo==0:
                         gameover= tk.Toplevel() #se genera la pantalla que se muestra para el about
                         gameover.title("Space Shooters")
                         gameover.minsize(1000, 600)
                         gameover.maxsize(1000,600)
                         gameover.configure(background="#1C1A59")
 
+                        reiniciar()
                         game.destroy()
         
                         gameover.protocol('WM_DELETE_WINDOW', lambda:destruye_ventana(gameover,ventanamain))
         
                         volver = tk.Button(gameover, text="Volver", width=10, command=lambda:destruye_ventana(gameover,ventanamain))
                         volver.place(x=350, y=70)
-            
+        def tiempojuego():
+                global tiempo
+                tiempo -=1
+                game.after(1000,tiempojuego)
+                if tiempo == 0:
+                        end()
+                print (tiempo)
+                print ('tiempojuego')    
 
         def movelaser(id, laser, laserloop):
                 global balas, enemigoslista
@@ -146,8 +169,9 @@ def ventana():
                         enemigoslista.pop(i)
                         puntos+=100
                         enemigosmuertos+=1
-                        print(enemigosmuertos)
                         end()
+                        
+                        
 
                         pygame.mixer.init()
                         explosionsound=pygame.mixer.Sound('explosion.wav')
@@ -323,7 +347,10 @@ def ventana():
                         if not enemigoslista: # si no hay enemigos, reiniciar contador
                                 contador_enemigos = 0
                         game.after(1000,aliens,canvas,newalien)
-        aliens(canvas,newalien)      
+        aliens(canvas,newalien)
+        tiempojuego()
+        
+
 
         
        
