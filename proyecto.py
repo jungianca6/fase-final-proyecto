@@ -23,13 +23,14 @@ contador_enemigos = 0
 tiempo=10
 
 def reiniciar():
-        global balas, balasaliens, enemigoslista, enemigosmuertos, contador_enemigos,tiempo
+        global balas, balasaliens, enemigoslista, enemigosmuertos, contador_enemigos,tiempo,puntos
         balas=[]
         balasaliens=[]
         enemigoslista=[]
         enemigosmuertos = 0
         contador_enemigos = 0
         tiempo = 10
+        puntos=0
 
         
 def destruye_ventana(vD,vG):     #entrar y salir               
@@ -115,7 +116,7 @@ def ventana():
 
         
         def end():
-                if enemigosmuertos>=10 or tiempo==0:
+                if enemigosmuertos>=10 or tiempo==0 or puntos>=500:
                         gameover= tk.Toplevel() #se genera la pantalla que se muestra para el about
                         gameover.title("Space Shooters")
                         gameover.minsize(1000, 600)
@@ -130,13 +131,13 @@ def ventana():
                         volver = tk.Button(gameover, text="Volver", width=10, command=lambda:destruye_ventana(gameover,ventanamain))
                         volver.place(x=350, y=70)
         def tiempojuego():
-                global tiempo
+                global tiempo,puntos
                 tiempo -=1
+                puntos +=10
                 game.after(1000,tiempojuego)
                 if tiempo == 0:
                         end()
-                print (tiempo)
-                print ('tiempojuego')    
+                  
 
         def movelaser(id, laser, laserloop):
                 global balas, enemigoslista
@@ -170,9 +171,7 @@ def ventana():
                         puntos+=100
                         enemigosmuertos+=1
                         end()
-                        
-                        
-
+                        print (puntos)
                         pygame.mixer.init()
                         explosionsound=pygame.mixer.Sound('explosion.wav')
                         explosionsound.play()
@@ -183,6 +182,11 @@ def ventana():
                       enemigoslista.pop(i)
                 else:
                         colisionbala(laser,i+1)
+
+        def puntaje():
+                global puntos
+                colisionbala(laser,0)
+                print(puntos)
         
         def remove_bala(id):
                 global balas
